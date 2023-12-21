@@ -22,7 +22,7 @@ const readData = async function () {
                  <td>
                  <button class="btn btn-success" type="button"><i class="fa-solid fa-pen"></i></button>
                  <button class="btn btn-danger" style="color:white;"><i class="fa-solid fa-trash"></i></button>
-                 <a href="" class="btn btn-warning" style="color:white;"><i class="fa-solid fa-right-to-bracket"></i></a>
+                 <a href="/users/${item._id}/todos" class="btn btn-warning" style="color:white;"><i class="fa-solid fa-right-to-bracket"></i></a>
                  </td>
               </tr>`
         })
@@ -42,5 +42,10 @@ const browse = () => {
     let inputData = document.getElementById('inputData').value
     query = inputData.toString()
     page = 1
+    readData()
+}
+
+const clear = () => {
+    query = document.getElementById('inputData').value = ''
     readData()
 }

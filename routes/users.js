@@ -9,7 +9,7 @@ module.exports = function (db) {
   const User = db.collection('users')
   router.get('/', async (req, res, next) => {
     try {
-      const { page = 1, limit = '5', query = '', sortBy = '_id', sortMode = 'desc' } = req.query
+      const { page = 1, limit = '5', query, sortBy = '_id', sortMode = 'desc' } = req.query
       const params = {}
       const sort = {}
       sort[sortBy] = sortMode
@@ -17,7 +17,7 @@ module.exports = function (db) {
 
       if (query) {
         params['$or'] = [{ "name": new RegExp(query, 'i') }, { "phone": new RegExp(query, 'i') }]
-        console.log(params)
+
       }
 
       const total = await User.count(params)
@@ -44,7 +44,16 @@ module.exports = function (db) {
   })
 
 
-
+  router.put('/:id', async (req, res, next) => {
+    try {
+      const id = req.params.id
+      const { name, phone } = req.body
+      const user = await User.findOneAndUpdate({ _id: new ObjectId(id) }, { $set: { name: name, phone: phone } }, { returnDocument: 'after' })
+      res.status(201).json(user)
+    } catch (err) {
+      res.status(500).json({ err })
+    }
+  })
 
 
 
@@ -52,11 +61,13 @@ module.exports = function (db) {
     try {
       const id = req.params.id
       const user = await User.findOneAndDelete({ _id: new ObjectId(id) })
+      console.log(user)
       res.status(201).json(user)
     } catch (err) {
       res.status(500).json({ err })
     }
   })
+
 
 
 
