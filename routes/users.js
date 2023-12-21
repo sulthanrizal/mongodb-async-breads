@@ -43,6 +43,15 @@ module.exports = function (db) {
     }
   })
 
+  router.get('/:id', async (req, res, next) => {
+    try {
+      const id = req.params.id
+      const user = await User.findOne({ _id: new ObjectId(id) })
+      res.status(201).json(user)
+    } catch (err) {
+      res.status(500).json({ err })
+    }
+  })
 
   router.put('/:id', async (req, res, next) => {
     try {
