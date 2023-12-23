@@ -22,8 +22,9 @@
 }
 
 .rows {
+    margin: 15px 0px 20px 20px;
     display: flex;
-    width: 100%;
+    width: 97%;
 }
 
 .rows span {

@@ -70,7 +70,7 @@ module.exports = function (db) {
     try {
       const id = req.params.id
       const user = await User.findOneAndDelete({ _id: new ObjectId(id) })
-      console.log(user)
+
       res.status(201).json(user)
     } catch (err) {
       res.status(500).json({ err })
