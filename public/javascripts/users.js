@@ -11,30 +11,90 @@ function getId(_id) {
 
 let button = document.getElementById('mybutton')
 button.onclick = () => {
-    condition ? addData() : editData()
+    conditional ? addData() : editData()
+    console.log('ini kondisi', conditional)
 }
 
 let addButton = document.getElementById('addButton')
 addButton.onclick = () => {
-    condition = true
+    conditional = true
     const name = document.getElementById('name').value = ""
     const phone = document.getElementById('phone').value = ""
 }
 
 
+const sortNameAsc = (name) => {
+    sortBy = name
+    sortMode = 'asc'
+    let random = `<a type="button" onclick="sortPhoneAsc('name')"><i class="fa-solid fa-sort"></i></a> Phone</th>`
+    let sortAsc = `
+    <a type="button" onclick="sortNameDesc('name')"><i class="fa-solid fa-sort-up"></i></a>
+    <span>Name</span>
+    `
+    document.getElementById(`sort-name`).innerHTML = sortAsc
+    document.getElementById(`sort-phone`).innerHTML = random
+    readData()
+}
 
-document.getElementById('formData').addEventListener('submit', function (event) {
-    event.preventDefault()
-    editData()
-})
-document.getElementById('formData').addEventListener('submit', function (event) {
+const sortNameDesc = (name) => {
+    sortBy = name
+    sortMode = 'desc'
+    let sortDesc = `
+    <a type="button" onclick="sortNameAsc('name')"><i class="fa-solid fa-sort-down"></i></a>
+    <span>Name</span>
+    `
+    document.getElementById(`sort-name`).innerHTML = sortDesc
+    readData()
+}
+
+const sortPhoneAsc = (phone) => {
+    sortBy = phone
+    sortMode = 'asc'
+    let random = `<a type="button" onclick="sortPhoneAsc('name')"><i class="fa-solid fa-sort"></i></a> Name</th>`
+    let sortAsc = `
+    <a type="button" onclick="sortPhoneDesc('phone')"><i class="fa-solid fa-sort-up"></i></a>
+    <span>Phone</span>
+    `
+    document.getElementById(`sort-phone`).innerHTML = sortAsc
+    document.getElementById(`sort-name`).innerHTML = random
+    readData()
+}
+
+const sortPhoneDesc = (phone) => {
+    sortBy = phone
+    sortMode = 'desc'
+    let sortDesc = `
+    <a type="button" onclick="sortPhoneAsc('phone')"><i class="fa-solid fa-sort-down"></i></a>
+    <span>Phone</span>
+    `
+    document.getElementById(`sort-phone`).innerHTML = sortDesc
+    readData()
+}
+
+
+const chooselimit = () => {
+    limit = document.getElementById('showData').value
+    page = 1
+    readData()
+}
+
+const changePage = (num) => {
+    page = num
+    readData(page)
+}
+
+
+document.getElementById('form-user').addEventListener('submit', function (event) {
     event.preventDefault()
     addData()
 })
-document.getElementById('formData').addEventListener('submit', function (event) {
+
+document.getElementById('form-user').addEventListener('submit', function (event) {
     event.preventDefault()
-    browse()
+    editData()
 })
+
+
 
 const browse = () => {
     const name = document.getElementById('name').value
@@ -73,21 +133,29 @@ const readData = async function () {
               </tr>`
         })
 
+        for (let i = 1; i <= users.pages; i++) {
+            pageNumber += `<a class="page-link ${page == i ? ' active' : ''} " ${users.pages == 1 ? `style =border-radius:4px;` : ''} ${i == 1 && page == i ? `style="border-top-left-radius:4px; border-bottom-left-radius:5px;"` : ''}  ${i == users.pages && page == i ? `style="border-top-right-radius:4px; border-bottom-right-radius:5px;"` : ''} id="button-pagination" onclick="changePage(${i})">${i}</a>`
 
-        for (let i = 0; i <= users.pages; i++) {
-            pageNumber += `<a class="page-link ${page == i ? 'active' : ''}" id="button-pagination" onclick="changePage(${i})">${i}</a>`
         }
+
         if (document.getElementById('showData').value == 0) {
             pagination += `
-            <span class="mx-2 mt-1">Showing ${users.offset + 1} to ${users.total} enteries</span>
-            <div class="page">
-            <a class="page-link active" id="button-pagination">1</a>
-            </div>`
+        <span class="mx-2 mt-1">Showing ${users.offset + 1} to ${users.total} of ${users.total} entries </span>
+        <div class="page">
+        <a class="page-link active" id="button-pagination">1</a>
+        </div>
+        `
         } else {
-            // pagination += `
-            // <span class="mx-2 mt-1">Showing ${users.offset + 1} to ${(Number(limit) + Number(users.offset))}   </span>
-            // `
+            pagination += `
+        <span class="showPage">Showing ${users.offset + 1} to ${(Number(limit) + Number(users.offset)) >= users.total ? Number(users.total) : Number(limit) + Number(users.offset)} of ${users.total} entries </span>
+        <div class="page">
+        ${users.page == 1 ? '' : '<a onclick="changePage(page - 1)" style="border-top-left-radius:4px; border-bottom-left-radius:4px;" class="page-link" arial-lable="back"><span arial-hidden = true">&laquo</span></a>'}
+        ${pageNumber}
+        ${users.page == users.pages ? '' : '<a onclick="changePage(page + 1)" class="page-link" style="border-top-right-radius:4px; border-bottom-right-radius:4px;" arial-lable="next"><span arial-hidden = true">&raquo</span></a>'}
+        </div>
+        `
         }
+        document.getElementById('button-pagination').innerHTML = pagination
         document.getElementById('users-table-body').innerHTML = html
     } catch (e) {
         res
@@ -118,7 +186,7 @@ const addData = async () => {
 
 
 const getoneData = async (id) => {
-    condition = "false"
+    conditional = false
     try {
         const response = await fetch(`http://localhost:3000/api/users/${id}`)
         const user = await response.json()
@@ -131,7 +199,6 @@ const getoneData = async (id) => {
 }
 
 const editData = async () => {
-    condition = "false"
     const name = document.getElementById('name').value
     const phone = document.getElementById('phone').value
     try {
@@ -146,10 +213,12 @@ const editData = async () => {
         const user = await response.json()
         document.getElementById('name').value = ""
         document.getElementById('phone').value = ""
-        readData()
+        console.log('jalan')
+
     } catch (err) {
         console.log(err)
     }
+    readData()
 }
 
 const deleteData = async () => {

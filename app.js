@@ -24,6 +24,8 @@ run()
 
     var indexRouter = require('./routes/index')(db);
     var usersRouter = require('./routes/users')(db);
+    var todosRouter = require('./routes/todos')(db);
+
 
 
     var app = express();
@@ -59,6 +61,7 @@ run()
 
     app.use('/', indexRouter);
     app.use('/api/users', usersRouter);
+    app.use('/api/todos', todosRouter);
 
 
     var debug = require('debug')('mongodbbread:server');

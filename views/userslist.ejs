@@ -42,8 +42,10 @@
                     <thead class="thead">
                         <tr>
                             <th>No.</th>
-                            <th>Name</th>
-                            <th>Phone</th>
+                            <th id="sort-name"> <a type="button" onclick="sortNameAsc('name')"><i
+                                        class="fa-solid fa-sort"></i>Name</th>
+                            <th id="sort-phone"> <a type="button" onclick="sortpPhoneAsc('phone')"><i
+                                        class="fa-solid fa-sort"></i>Phone</th>
                             <th>actions</th>
                         </tr>
                     </thead>
@@ -78,7 +80,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="form-user">
+                    <div id="form-user">
                         <div class="row mb-3">
                             <label for="name" class="col-sm-2 col-form-label">Name</label>
                             <div class="col-sm-10">
@@ -91,7 +93,7 @@
                                 <input type="phone" class="form-control" id="phone" required>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

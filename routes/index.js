@@ -6,6 +6,10 @@ module.exports = function (db) {
     res.render('userslist')
   });
 
+  router.get('/', function (req, res, next) {
+    res.render('todoslist')
+  });
+
   return router;
 
 }
