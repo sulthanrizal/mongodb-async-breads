@@ -1,7 +1,7 @@
-const { name } = require('ejs')
+
 var express = require('express');
 var router = express.Router();
-const { ObjectId, ReturnDocument } = require('mongodb')
+const { ObjectId } = require('mongodb')
 
 
 module.exports = function (db) {
@@ -53,7 +53,7 @@ module.exports = function (db) {
     router.post('/', async (req, res, next) => {
         try {
             const { title, executor } = req.body
-            const oneDay = 24 * 60 * 60 * 1000
+            const oneDay = 31 * 60 * 60 * 1000
             const user = await User.findOne({ _id: new ObjectId(executor) })
             const todo = await Todo.insertOne({ title: title, complete: false, deadline: new Date(Date.now() + oneDay), executor: user._id })
             const data = await Todo.find({ _id: new ObjectId(todo.insertedId) }).toArray()
@@ -77,7 +77,7 @@ module.exports = function (db) {
         try {
             const id = req.params.id
             const { title, deadline, complete } = req.body
-            const todo = await Todo.findOneAndUpdate({ _id: new ObjectId(id) }, { $set: { title: title, complete: JSON.parse(complete), deadline: new Date(deadline) } }, { returnDocument: 'after' })
+            const todo = await Todo.findOneAndUpdate({ _id: new ObjectId(id) }, { $set: { title: title, deadline: new Date(deadline), complete: JSON.parse(complete) } }, { returnDocument: 'after' })
             res.status(201).json(todo)
         } catch (err) {
             res.status(500).json({ err })

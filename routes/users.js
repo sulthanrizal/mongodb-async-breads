@@ -78,10 +78,10 @@ module.exports = function (db) {
     }
   })
 
-
-
-
-
+  const pageTodos = async (id) => {
+    const response = await fetch(`http://localhost:3000/users/${id}/todos`)
+    const todos = await response.json()
+  }
   return router;
 
 }
