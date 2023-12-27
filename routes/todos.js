@@ -52,6 +52,7 @@ module.exports = function (db) {
         }
     })
 
+
     router.post('/', async (req, res, next) => {
         try {
             const { title, executor } = req.body
