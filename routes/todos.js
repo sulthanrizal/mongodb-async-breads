@@ -2,6 +2,7 @@
 var express = require('express');
 var router = express.Router();
 const { ObjectId } = require('mongodb')
+const moment = require('moment')
 
 
 module.exports = function (db) {
@@ -54,7 +55,7 @@ module.exports = function (db) {
     router.post('/', async (req, res, next) => {
         try {
             const { title, executor } = req.body
-            const oneDay = 31 * 60 * 60 * 1000
+            const oneDay = 24 * 60 * 60 * 1000
             const user = await User.findOne({ _id: new ObjectId(executor) })
             const todo = await Todo.insertOne({ title: title, complete: false, deadline: new Date(Date.now() + oneDay), executor: user._id })
             const data = await Todo.find({ _id: new ObjectId(todo.insertedId) }).toArray()

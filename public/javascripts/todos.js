@@ -36,6 +36,10 @@ const readData = async (semua) => {
             htmlList += ` 
                 <div id="${item._id}" class="todoslist ${item.complete == false && new Date(`${item.deadline}`).getTime() < new Date().getTime() ? ' alert alert-danger' : item.complete == true ? ' alert alert-success' : ' alert alert-secondary'}" role="alert">
                  ${moment(item.deadline).format('DD-MM-YYYY HH:mm')} ${item.title}
+                 <div>
+                    <a type="button" onclick="getData('${item._id}')" data-bs-toggle="modal" data-bs-target="#edit"><i class="fa-solid fa-pencil"></i></a>
+                    <a type="button" onclick="getId('${item._id}')"  data-bs-toggle="modal" data-bs-target="#delete"><i class="fa-solid fa-trash mx-2"></i></a>
+                 </div>    
                 </div>
                 `
         })
