@@ -12,7 +12,6 @@ function getId(_id) {
 let button = document.getElementById('mybutton')
 button.onclick = () => {
     conditional ? addData() : editData()
-    console.log('ini kondisi', conditional)
 }
 
 let addButton = document.getElementById('addButton')
@@ -158,7 +157,7 @@ const readData = async function () {
         document.getElementById('button-pagination').innerHTML = pagination
         document.getElementById('users-table-body').innerHTML = html
     } catch (e) {
-        console.log(e)
+        alert('failed to read data users')
     }
 }
 readData()
@@ -180,7 +179,7 @@ const addData = async () => {
         document.getElementById('phone').value = ""
         readData()
     } catch (err) {
-        console.log(err)
+        alert('falied to add data users')
     }
 }
 
@@ -194,7 +193,7 @@ const getoneData = async (id) => {
         document.getElementById('name').value = user.name
         document.getElementById('phone').value = user.phone
     } catch (err) {
-        console.log(err)
+        alert('failed to get one data users')
     }
 }
 
@@ -213,10 +212,10 @@ const editData = async () => {
         const user = await response.json()
         document.getElementById('name').value = ""
         document.getElementById('phone').value = ""
-        console.log('jalan')
+
 
     } catch (err) {
-        console.log(err)
+        alert('failed to edit data users')
     }
     readData()
 }
@@ -231,7 +230,7 @@ const deleteData = async () => {
             body: JSON.stringify({ name, phone })
         })
     } catch (err) {
-        console.log(err)
+        alert('failed to delete data users')
     }
     readData()
 }
