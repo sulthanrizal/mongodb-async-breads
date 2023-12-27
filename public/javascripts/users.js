@@ -158,7 +158,7 @@ const readData = async function () {
         document.getElementById('button-pagination').innerHTML = pagination
         document.getElementById('users-table-body').innerHTML = html
     } catch (e) {
-        res
+        console.log(e)
     }
 }
 readData()
