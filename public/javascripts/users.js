@@ -1,8 +1,6 @@
-
-
 //variable
 let id = null, conditional = null, page = 1, query = '', limit = 5, sortBy = '_id', sortMode = 'desc'
-
+let data = ``
 // support fungsi
 
 function getId(_id) {
@@ -24,51 +22,54 @@ addButton.onclick = () => {
 
 const sortNameAsc = (name) => {
     sortBy = name
-    sortMode = 'asc'
-    let random = `<a type="button" onclick="sortPhoneAsc('name')"><i class="fa-solid fa-sort"></i></a> Phone</th>`
-    let sortAsc = `
+    sortMode = 'desc'
+    let random = `<a type="button" onclick="sortPhoneAsc('phone')"> <i class="fa-solid fa-sort"></i></a> Phone</th></a>`
+    let sortnameasc = `
     <a type="button" onclick="sortNameDesc('name')"><i class="fa-solid fa-sort-up"></i></a>
-    <span>Name</span>
+    <span>Name</span> </a>
     `
-    document.getElementById(`sort-name`).innerHTML = sortAsc
-    document.getElementById(`sort-phone`).innerHTML = random
+    document.getElementById('sort-name').innerHTML = sortnameasc
+    document.getElementById('sort-phone').innerHTML = random
     readData()
 }
 
 const sortNameDesc = (name) => {
     sortBy = name
-    sortMode = 'desc'
-    let sortDesc = `
+    sortMode = 'asc'
+    let sortnamedesc = `
     <a type="button" onclick="sortNameAsc('name')"><i class="fa-solid fa-sort-down"></i></a>
     <span>Name</span>
     `
-    document.getElementById(`sort-name`).innerHTML = sortDesc
+    document.getElementById('sort-name').innerHTML = sortnamedesc
     readData()
 }
 
 const sortPhoneAsc = (phone) => {
     sortBy = phone
     sortMode = 'asc'
-    let random = `<a type="button" onclick="sortPhoneAsc('name')"><i class="fa-solid fa-sort"></i></a> Name</th>`
-    let sortAsc = `
-    <a type="button" onclick="sortPhoneDesc('phone')"><i class="fa-solid fa-sort-up"></i></a>
+    let random = ` <a type="button" onclick="sortNameAsc('phone')"><i class="fa-solid fa-sort"></i>Name</a>`
+    let sortphoneasc = `
+    <a type="button" onclick="sortPhoneDesc('phone')"> <i class="fa-solid fa-sort-up"></i></a>
     <span>Phone</span>
     `
-    document.getElementById(`sort-phone`).innerHTML = sortAsc
-    document.getElementById(`sort-name`).innerHTML = random
+
+    document.getElementById('sort-phone').innerHTML = sortphoneasc
+    document.getElementById('sort-name').innerHTML = random
+
     readData()
 }
 
 const sortPhoneDesc = (phone) => {
     sortBy = phone
     sortMode = 'desc'
-    let sortDesc = `
-    <a type="button" onclick="sortPhoneAsc('phone')"><i class="fa-solid fa-sort-down"></i></a>
+    let sortphonedesc = `
+    <a type="button" onclick="sortPhoneAsc('phone')"> <i class="fa-solid fa-sort-down"></i></a>
     <span>Phone</span>
     `
-    document.getElementById(`sort-phone`).innerHTML = sortDesc
+    document.getElementById('sort-phone').innerHTML = sortphonedesc
     readData()
 }
+
 
 
 const chooselimit = () => {
@@ -108,8 +109,26 @@ const browse = () => {
 
 const reset = () => {
     query = document.getElementById('inputData').value = ""
+    limit = document.getElementById('showData').value = "5"
+    sortBy = '_id'
+    sortMode = 'desc'
+
+    let resetSortName = ` 
+     <a type="button" onclick="sortNameAsc('name')"><i class="fa-solid fa-sort"></i></a>
+    <span>Name</span> </a>`
+
+    let resetSortPhone = ` 
+     <a type="button" onclick="sortPhoneAsc('phone')"><i class="fa-solid fa-sort"></i></a>
+    <span>Phone</span> </a>`
+
+    document.getElementById('sort-phone').innerHTML = resetSortPhone
+
+    document.getElementById('sort-name').innerHTML = resetSortName
+
     readData()
 }
+
+
 
 const readData = async function () {
     let pagination = ''
@@ -139,9 +158,9 @@ const readData = async function () {
 
         if (document.getElementById('showData').value == 0) {
             pagination += `
-        <span class="mx-2 mt-1">Showing ${users.offset + 1} to ${users.total} of ${users.total} entries </span>
+        <span class="mx-2" style="margin-top:15px;">Showing ${users.offset + 1} to ${users.total} of ${users.total} entries </span>
         <div class="page">
-        <a class="page-link active" id="button-pagination">1</a>
+        <a class="page-link active" style="border-radius:4px;" id="button-pagination">1</a>
         </div>
         `
         } else {
@@ -226,8 +245,7 @@ const deleteData = async () => {
             method: 'DELETE',
             headers: {
                 "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ name, phone })
+            }
         })
     } catch (err) {
         alert('failed to delete data users')
