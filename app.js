@@ -40,6 +40,15 @@ run()
     app.use(cookieParser());
     app.use(express.static(path.join(__dirname, 'public')));
 
+
+    // app.use(function (req, res, next) {
+    //   res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    //   res.header('Expires', '-1');
+    //   res.header('Pragma', 'no-cache');
+
+    //   next();
+    // });
+
     app.use(function (req, res, next) {
 
       // Website you wish to allow to connect
@@ -58,6 +67,7 @@ run()
       // Pass to next layer of middleware
       next();
     });
+
 
     app.use('/', indexRouter);
     app.use('/api/users', usersRouter);
