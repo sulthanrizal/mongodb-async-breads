@@ -10,6 +10,7 @@ module.exports = function (db) {
   const User = db.collection('users')
   router.get('/', async (req, res, next) => {
     try {
+
       const { page = 1, limit = '5', query, sortBy = '_id', sortMode = 'desc' } = req.query
       const params = {}
       const sort = {}
