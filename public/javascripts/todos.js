@@ -1,6 +1,6 @@
 
 // variables support
-let id = null, title = '', complete = '', page = 1, limit = 10, sortBy = '_id', sortMode = 'desc'
+let id = null, title = '', complete = '', page = 1, limit = 15, sortBy = '_id', sortMode = 'desc'
 let deadline = '', startdateDeadline = '', enddateDeadline = ''
 let complt = false
 
@@ -13,12 +13,25 @@ function getId(_id) {
 
 
 
+const browseData = () => {
+    page = 1
+    title = $('#searchTitle').val()
+    startdateDeadline = $('#startdateDeadline').val()
+    enddateDeadline = $('#enddateDeadline').val()
+    if ($('#completeTodo').val()) complete = $('#completeTodo').val()
+    else complete = ''
+
+    readData(!complt)
+
+}
+
+
+
 const resetData = () => {
     title = ''
     startdateDeadline = ''
     enddateDeadline = ''
     complete = ''
-
     $('#searchTitle').val('')
     $('#startdateDeadline').val('')
     $('#enddateDeadline').val('')
@@ -33,6 +46,13 @@ const resetData = () => {
     readData(!complt)
 }
 
+
+$(window).scroll(function () {
+    if ($(document).scrollTop() >= $(document).height() - $(window).height()) {
+        page++
+        readData(coba)
+    }
+})
 
 const sortAsc = (deadline) => {
     page = 1
@@ -57,7 +77,7 @@ const sortDesc = (deadline) => {
 }
 
 
-const readData = async (semua) => {
+const readData = async () => {
     try {
         const response = await $.ajax({
             url: `/api/todos`,
@@ -77,7 +97,7 @@ const readData = async (semua) => {
             }
         })
         let htmlList = ''
-        response.data.forEach((item, index) => {
+        response.data.forEach((item) => {
             htmlList += ` 
                 <div id="${item._id}" class="todoslist ${item.complete == false && new Date(`${item.deadline}`).getTime() < new Date().getTime() ? ' alert alert-danger' : item.complete == true ? ' alert alert-success' : ' alert alert-secondary'}" role="alert">
                  ${moment(item.deadline).format('DD-MM-YYYY HH:mm')} ${item.title}
@@ -89,14 +109,14 @@ const readData = async (semua) => {
                 `
         })
 
-        if (semua == false) {
-            $('#showTodos').append(htmlList)
-        } else if (semua == true) {
+        if (page === 1) {
             $('#showTodos').html(htmlList)
+        } else if (page > 1) {
+            $('#showTodos').append(htmlList)
         }
 
     } catch (err) {
-        alert('failed to read data todos')
+        throw err
     }
 }
 readData(complt)
@@ -129,7 +149,7 @@ const addData = async () => {
         title = ''
         $('#title').val('')
     } catch (err) {
-        alert('failed to add data todos')
+        throw err
     }
 }
 
@@ -145,10 +165,10 @@ const getData = async (_id) => {
         $('#editTitle').val(response.title)
         $('#editDeadline').val(moment(response.deadline).format('YYYY-MM-DDThh:mm'))
         $('#editComplete').prop('checked', response.complete)
-    } catch (e) {
-        console.log(e)
-        alert('tidak dapat menampilkan data')
+    } catch (err) {
+        throw err
     }
+    readData(complt)
 }
 
 
@@ -185,10 +205,10 @@ const editData = async () => {
             complete = ''
         }
 
-    } catch (e) {
-        console.log(e)
-        alert('Perubahan data gagal')
+    } catch (err) {
+        throw err
     }
+    readData(complt)
 }
 
 const deleteData = async () => {
@@ -200,9 +220,9 @@ const deleteData = async () => {
         })
         $(`#${id}`).remove()
     } catch (err) {
-        alert('failed to delete data todos')
+        throw err
     }
-
+    readData(complt)
 }
 
 
