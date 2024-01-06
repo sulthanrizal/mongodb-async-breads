@@ -50,7 +50,7 @@ const resetData = () => {
 $(window).scroll(function () {
     if ($(document).scrollTop() >= $(document).height() - $(window).height()) {
         page++
-        readData(coba)
+        readData(complt)
     }
 })
 
