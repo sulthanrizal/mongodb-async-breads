@@ -39,7 +39,8 @@ module.exports = function (db) {
     try {
       const { name, phone } = req.body
       const user = await User.insertOne({ name: name, phone: phone })
-      res.status(201).json(user)
+      const data = await User.find({ _id: new ObjectId(user.insertedId) }).toArray()
+      res.status(201).json(data)
     } catch (err) {
       res.status(500).json({ err })
     }
